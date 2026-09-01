@@ -1,0 +1,72 @@
+openapi: 3.0.3
+info:
+  title: Posiciones arancelarias CIVUCE
+  version: 1.0.0
+  description: >
+    Búsqueda de posiciones SIM/NCM para exportación a partir de una descripción
+    en lenguaje natural, con unidad de medida. Clasificación orientativa; no es
+    dictamen aduanero. Integrar GET /posiciones/buscar, GET /posiciones/{codigo}
+    y POST /posiciones/seleccion.
+servers:
+  - url: /api/v1
+paths:
+  /health:
+    get:
+      summary: Estado de CIVUCE y OpenRouter
+      responses:
+        "200":
+          description: OK
+  /posiciones/buscar:
+    get:
+      summary: Buscar posiciones candidatas
+      parameters:
+        - in: query
+          name: q
+          required: true
+          schema:
+            type: string
+          description: Descripción del artículo en lenguaje natural
+        - in: query
+          name: limite
+          schema:
+            type: integer
+            default: 12
+      responses:
+        "200":
+          description: Candidatas agrupadas con unidad de medida
+        "400":
+          description: Query inválida
+        "422":
+          description: Sin resultados relevantes
+  /posiciones/{codigo}:
+    get:
+      summary: Detalle CIVUCE de una posición SIM
+      parameters:
+        - in: path
+          name: codigo
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Detalle y unidad de medida
+  /posiciones/seleccion:
+    post:
+      summary: Registrar que el usuario eligió una posición para una consulta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [consulta, codigoSim]
+              properties:
+                consulta:
+                  type: string
+                  example: remera
+                codigoSim:
+                  type: string
+                  example: 6109.10.00.110Y
+      responses:
+        "200":
+          description: Selección persistida para boost futuro

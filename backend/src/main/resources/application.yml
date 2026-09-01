@@ -1,0 +1,44 @@
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  application:
+    name: impo-expo-handoff
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+app:
+  aviso-legal: >
+    Clasificación orientativa basada en CIVUCE. No constituye dictamen aduanero ni
+    autorización de exportación. Verificar ante Aduana y organismos competentes.
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:8080,http://127.0.0.1:8080}
+  openrouter:
+    api-key: ${OPENROUTER_API_KEY:}
+    base-url: ${OPENROUTER_BASE_URL:https://openrouter.ai/api/v1}
+    model: ${OPENROUTER_MODEL:google/gemini-2.5-flash-lite}
+    embedding-model: ${OPENROUTER_EMBEDDING_MODEL:openai/text-embedding-3-small}
+    timeout-seconds: ${OPENROUTER_TIMEOUT_SECONDS:20}
+  civuce:
+    base-url: ${CIVUCE_BASE_URL:https://qa.ci.vuce.gob.ar}
+    auth-email: ${CIVUCE_AUTH_EMAIL:vuce@vuce.gob.ar}
+    timeout-seconds: ${CIVUCE_TIMEOUT_SECONDS:20}
+    max-resultados: ${CIVUCE_MAX_RESULTADOS:12}
+  historial:
+    path: ${HISTORIAL_PATH:data/selecciones.jsonl}
+    umbral: ${HISTORIAL_UMBRAL:0.82}
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%X{requestId:-}] %-5level %logger{36} - %msg%n"
+  level:
+    ar.correoargentino: INFO

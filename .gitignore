@@ -1,0 +1,11 @@
+.env
+.env.local
+backend/.env
+backend/target/
+backend/data/selecciones.jsonl
+*.log
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
